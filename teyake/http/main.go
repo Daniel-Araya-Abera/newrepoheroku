@@ -12,13 +12,14 @@ import (
 	catServiceImp "teyake/category/service"
 	quesRepoImp "teyake/question/repository"
 	quesServiceImp "teyake/question/service"
+	"teyake/teyake/http/handler"
 	upvoteRepoImp "teyake/upvote/repository"
 	upvoteServiceImp "teyake/upvote/service"
-	"teyake/teyake/http/handler"
 	userRepoImp "teyake/user/repository"
 	userServiceImp "teyake/user/service"
 
 	"teyake/util"
+	"teyake/util/new"
 	"teyake/util/token"
 
 	"github.com/jinzhu/gorm"
@@ -45,7 +46,7 @@ func createTables(dbconn *gorm.DB) []error {
 //	return newreaddir{f},nil
 //}
 func main() {
-	dbconn, err := gorm.Open("postgres", util.DBConnectString)
+	dbconn, err := gorm.Open("postgres", new.DBConnectString)
 	defer dbconn.Close()
 	templ := template.Must(template.New("main").Funcs(util.AvailableFuncMaps).ParseGlob("ui/templates/*"))
 	fs := http.FileServer(http.Dir("ui/assets"))
@@ -78,7 +79,7 @@ func main() {
 
 	upvoteRepo := upvoteRepoImp.NewUpVoteGormRepo(dbconn)
 	upvoteService := upvoteServiceImp.NewUpVoteService(upvoteRepo)
-	
+
 	//userService.StoreUser(&entity.UserMock)
 	//Uncomment the following lines after you created a fresh teyake db
 	//createTables(dbconn)
